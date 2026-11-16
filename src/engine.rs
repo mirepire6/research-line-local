@@ -362,7 +362,7 @@ fn exa_result(input: &str) -> Option<Source> {
     })
 }
 
-fn exa_call(tool: &str, arguments: Value) -> AppResult<Vec<Source>> {
+fn exa_connection() -> AppResult<impl FnMut(&str, Value) -> AppResult<Vec<Source>>> {
     let client = http_client(15);
     let setup = json!({"jsonrpc":"2.0","id":1,"method":"initialize","params":{
         "protocolVersion":"2025-06-18","capabilities":{},
@@ -384,7 +384,7 @@ fn exa_call(tool: &str, arguments: Value) -> AppResult<Vec<Source>> {
                 .map(str::to_owned)
         })
         .unwrap_or_else(|| "2025-06-18".into());
-    let request = || {
+    let request = move || {
         let mut request = client
             .post(EXA)
             .header("Accept", "application/json, text/event-stream")
@@ -395,32 +395,33 @@ fn exa_call(tool: &str, arguments: Value) -> AppResult<Vec<Source>> {
         request
     };
     let _ = request().send_json(json!({"jsonrpc":"2.0","method":"notifications/initialized"}));
-    let mut response = request()
-        .send_json(json!({"jsonrpc":"2.0","id":2,"method":"tools/call",
-        "params":{"name":tool,"arguments":arguments}}))
-        .map_err(|error| format!("Web search is unavailable. ({error})"))?;
-    let body = response
-        .body_mut()
-        .read_to_string()
-        .map_err(|error| error.to_string())?;
-    let result =
-        exa_response(&body).ok_or("The search provider did not return readable results.")?;
-    if result.get("error").is_some() || result["result"]["isError"].as_bool() == Some(true) {
-        return Err(
-            "The search provider couldn't complete the query. Try again in a moment.".into(),
-        );
-    }
-    let mut sources = Vec::new();
-    for item in result["result"]["content"].as_array().into_iter().flatten() {
-        if let Some(text) = item["text"].as_str() {
-            sources.extend(
-                text.trim_start_matches("Title:")
-                    .split("\nTitle:")
-                    .filter_map(exa_result),
+    let mut id = 1;
+    Ok(move |tool: &str, arguments: Value| {
+        id += 1;
+        let mut response = request()
+            .send_json(json!({"jsonrpc":"2.0","id":id,"method":"tools/call",
+            "params":{"name":tool,"arguments":arguments}}))
+            .map_err(|error| format!("Web search is unavailable. ({error})"))?;
+        let body = response
+            .body_mut()
+            .read_to_string()
+            .map_err(|error| error.to_string())?;
+        let result =
+            exa_response(&body).ok_or("The search provider did not return readable results.")?;
+        if result.get("error").is_some() || result["result"]["isError"].as_bool() == Some(true) {
+            return Err(
+                "The search provider couldn't complete the query. Try again in a moment.".into(),
             );
         }
-    }
-    Ok(sources)
+        Ok(result["result"]["content"]
+            .as_array()
+            .into_iter()
+            .flatten()
+            .filter_map(|item| item["text"].as_str())
+            .flat_map(|text| text.trim_start_matches("Title:").split("\nTitle:"))
+            .filter_map(exa_result)
+            .collect())
+    })
 }
 
 fn search_batch(
@@ -430,13 +431,14 @@ fn search_batch(
     max: usize,
     stop: &AtomicBool,
     emit: Emit,
+    exa: &mut impl FnMut(&str, Value) -> AppResult<Vec<Source>>,
 ) -> AppResult<()> {
     let mut seen: HashSet<String> = sources.iter().map(|source| source.url.clone()).collect();
     let mut error = None;
     for query in queries {
         check_stop(stop)?;
         emit(json!({"type":"status", "message":format!("Searching for {query}")}));
-        match exa_call("web_search_exa", json!({"query":query,"numResults":7})) {
+        match exa("web_search_exa", json!({"query":query,"numResults":7})) {
             Ok(found) => sources.extend(
                 found
                     .into_iter()
@@ -495,13 +497,14 @@ pub fn run(
     if matches!(mode, "web" | "deep") {
         let deep = mode == "deep";
         emit(json!({"type":"status","message":"Planning web searches…"}));
+        let mut exa = exa_connection()?;
         let mut used = Vec::new();
         let urls = public_urls(question);
         let mut sources = if urls.is_empty() {
             Vec::new()
         } else {
             emit(json!({"type":"status","message":"Reading public links…"}));
-            exa_call("web_fetch_exa", json!({"urls": urls, "maxCharacters":2500}))?
+            exa("web_fetch_exa", json!({"urls": urls, "maxCharacters":2500}))?
         };
         let mut queries = if sources.is_empty() || deep {
             plan(
@@ -518,14 +521,14 @@ pub fn run(
         if queries.is_empty() && !question.contains("://") {
             queries.push(shorten(question, 240).into());
         }
-        search_batch(queries, &mut sources, &mut used, 3, stop, emit)?;
+        search_batch(queries, &mut sources, &mut used, 3, stop, emit, &mut exa)?;
         if deep {
             check_stop(stop)?;
             emit(
                 json!({"type":"status","message":"Checking gaps and looking for independent sources…"}),
             );
             let queries = plan(model, question, &previous, &sources, &used, 2)?;
-            search_batch(queries, &mut sources, &mut used, 2, stop, emit)?;
+            search_batch(queries, &mut sources, &mut used, 2, stop, emit, &mut exa)?;
         }
         sources.truncate(if deep { 8 } else { 3 });
         if sources.is_empty() {
@@ -558,12 +561,7 @@ pub fn run(
         role: "system".into(),
         content: RESPONSE_STYLE.into(),
     }];
-    for message in previous {
-        messages.push(Message {
-            role: message.role.clone(),
-            content: shorten(&message.content, 1200).into(),
-        });
-    }
+    messages.extend(previous);
     let documents: Vec<Value> = input
         .attachments
         .iter()

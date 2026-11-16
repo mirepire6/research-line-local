@@ -134,6 +134,7 @@ function asJson(value) {
 }
 
 async function updateStatus() {
+  if (document.hidden) return;
   try {
     const status = await (await api("/api/status", { signal: AbortSignal.timeout(6000) })).json();
     state.endpoint = status.endpoint || state.endpoint;
@@ -808,4 +809,5 @@ renderHistory();
 renderConversation();
 syncComposer();
 void updateStatus();
+document.addEventListener("visibilitychange", updateStatus);
 window.setInterval(updateStatus, 8000);
