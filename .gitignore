@@ -1,0 +1,10 @@
+/target/
+/.venv/
+/dist/
+*.gguf
+*.safetensors
+*.onnx
+*.bin
+*.log
+.env
+__pycache__/

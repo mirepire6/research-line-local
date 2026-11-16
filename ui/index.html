@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="local-ai-token" content="__LOCAL_AI_TOKEN__">
+  <meta name="color-scheme" content="light dark">
+  <title>Local AI</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-logo" viewBox="0 0 24 24"><path d="M12 2.5l2.55 6.95L21.5 12l-6.95 2.55L12 21.5l-2.55-6.95L2.5 12l6.95-2.55L12 2.5Z"/><path d="M19 3v4m-2-2h4M5 17v4m-2-2h4"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M9 5v14"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20.5 12a7.5 7.5 0 0 1-7.5 7.5H7.5l-4 1.5 1.5-4v-5a7.5 7.5 0 1 1 15 0Z"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M20.3 9.3l-2-.5a7 7 0 0 0-.8-1.4l.6-2-2.5-1.5-1.5 1.5a7 7 0 0 0-1.7-.2L11 3.5l-2.9.7-.2 2.1a7 7 0 0 0-1.3 1.1l-2.1-.1-1.1 2.7 1.7 1.2a7 7 0 0 0 .1 1.8l-1.4 1.6 1.7 2.4 2-.6a7 7 0 0 0 1.4.8l.5 2 2.9.1.7-2a7 7 0 0 0 1.5-.7l1.9.8 1.9-2.2-1.2-1.8a7 7 0 0 0 .2-1.8l1.8-1.1-.8-2.2Z" transform="translate(.75 .8)"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></symbol>
+      <symbol id="i-clip" viewBox="0 0 24 24"><path d="m9 13.5 5.7-5.7a2.4 2.4 0 0 1 3.4 3.4L11 18.3a4.4 4.4 0 0 1-6.2-6.2l7.4-7.4a5.7 5.7 0 0 1 8 8l-6.7 6.7"/></symbol>
+      <symbol id="i-arrow-out" viewBox="0 0 24 24"><path d="M6.5 17.5 17.5 6.5M8 6.5h9.5V16"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.2 5.2 3.2 8.5s-1 6.1-3.2 8.5c-2.2-2.4-3.2-5.2-3.2-8.5s1-6.1 3.2-8.5Z"/></symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 4h8l4 4v12H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M14 4v5h4M8 13h6m-6 3h4"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 4.5 4.5"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-screen" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M9 20h6m-3-4v4"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.2 15.5A8.7 8.7 0 0 1 8.5 3.8 8.7 8.7 0 1 0 20.2 15.5Z"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v11m-4-4 4 4 4-4M5 15v5h14v-5"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="12" rx="2"/><path d="M15 5H6a2 2 0 0 0-2 2v9"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14m-2 0-.7 13H7.7L7 7m2 0V4h6v3"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4 10-10"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="shell" id="shell">
+    <div class="window-controls" aria-label="Window controls">
+      <button type="button" class="traffic traffic-close" data-window="close" aria-label="Close window" title="Close window"></button>
+      <button type="button" class="traffic traffic-minimize" data-window="minimize" aria-label="Minimize window" title="Minimize window"></button>
+      <button type="button" class="traffic traffic-maximize" data-window="maximize" aria-label="Maximize or restore window" title="Maximize or restore window"></button>
+    </div>
+    <aside class="sidebar" id="sidebar" aria-label="Conversations">
+      <div class="sidebar-top">
+        <span class="window-drag" data-drag aria-hidden="true"></span>
+      </div>
+      <div class="sidebar-inner">
+        <div class="identity">
+          <div class="brand-icon"><svg class="icon"><use href="#i-logo"></use></svg></div>
+          <span>Local AI</span>
+        </div>
+        <button type="button" class="new-chat" id="new-chat">
+          <svg class="icon"><use href="#i-plus"></use></svg>
+          <span>New chat</span>
+          <kbd title="Ctrl + N">Ctrl N</kbd>
+        </button>
+        <div class="history" id="history" hidden>
+          <div class="history-label">Chats</div>
+          <div id="chat-list"></div>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="theme-switch" role="group" aria-label="Appearance">
+          <button type="button" data-theme-choice="system" title="Use system appearance" aria-label="System appearance" aria-pressed="true"><svg class="icon"><use href="#i-screen"></use></svg></button>
+          <button type="button" data-theme-choice="light" title="Light appearance" aria-label="Light appearance" aria-pressed="false"><svg class="icon"><use href="#i-sun"></use></svg></button>
+          <button type="button" data-theme-choice="dark" title="Dark appearance" aria-label="Dark appearance" aria-pressed="false"><svg class="icon"><use href="#i-moon"></use></svg></button>
+        </div>
+        <button type="button" class="icon-button" id="settings" aria-label="Settings" title="Settings"><svg class="icon"><use href="#i-gear"></use></svg></button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="top-bar" data-drag>
+        <button type="button" class="icon-button side-toggle" id="toggle-sidebar" aria-label="Toggle conversations" title="Toggle conversations" aria-controls="sidebar" aria-expanded="true"><svg class="icon"><use href="#i-panel"></use></svg></button>
+        <span id="chat-title" class="chat-title">New conversation</span>
+        <button type="button" id="backend-status" class="backend-status" title="Model settings">
+          <span class="status-dot" aria-hidden="true"></span><span id="model-status">Checking local model</span>
+        </button>
+      </header>
+      <div class="scroll-area" id="scroll-area">
+        <div class="welcome" id="welcome">
+          <div class="welcome-icon" aria-hidden="true"><svg class="icon"><use href="#i-logo"></use></svg></div>
+          <h1>What can I help you find?</h1>
+          <p>Ask a question in English or Serbian, or bring a document into the conversation.</p>
+          <div class="starter-actions" id="starter-actions">
+            <button type="button" data-starter="Pronađi gradsku biblioteku u Prokuplju i proveri radno vreme.">
+              <svg class="icon"><use href="#i-globe"></use></svg><span>Find something nearby</span><svg class="icon starter-arrow"><use href="#i-arrow-out"></use></svg>
+            </button>
+            <button type="button" data-starter="Istraži detaljno: "><svg class="icon"><use href="#i-search"></use></svg><span>Research a topic</span><svg class="icon starter-arrow"><use href="#i-arrow-out"></use></svg></button>
+            <button type="button" data-starter="document"><svg class="icon"><use href="#i-doc"></use></svg><span>Open a document</span><svg class="icon starter-arrow"><use href="#i-arrow-out"></use></svg></button>
+          </div>
+        </div>
+        <div class="messages" id="messages" role="log" aria-label="Conversation"></div>
+      </div>
+
+      <div class="composer-region">
+        <div class="activity" id="activity" role="status" aria-live="polite"></div>
+        <form class="composer" id="composer">
+          <div class="attachments" id="attachments" hidden></div>
+          <label for="prompt" class="sr-only">Message Local AI</label>
+          <textarea id="prompt" rows="1" maxlength="10000" placeholder="Message Local AI…" spellcheck="false"></textarea>
+          <div class="composer-actions">
+            <button type="button" class="icon-button attach-button" id="attach" aria-label="Attach a document" title="Attach a document"><svg class="icon"><use href="#i-clip"></use></svg></button>
+            <input type="file" id="file-input" hidden multiple accept=".pdf,.docx,.pptx,.xlsx,.xls,.html,.htm,.txt,.md,.csv,.tsv,.json,.xml">
+            <div class="mode-selector">
+              <svg class="icon mode-symbol"><use href="#i-logo"></use></svg>
+              <label for="mode" class="sr-only">Response mode</label>
+              <select id="mode">
+                <option value="agent">Agent</option>
+                <option value="chat">Chat</option>
+                <option value="web">Web search</option>
+                <option value="deep">Deep research</option>
+                <option value="folder" id="folder-mode" disabled>Folder helper</option>
+              </select>
+              <svg class="icon select-chevron"><use href="#i-chevron"></use></svg>
+            </div>
+            <button type="button" id="stop" class="send-button stop-button" aria-label="Stop response" title="Stop response" hidden><svg class="icon"><use href="#i-stop"></use></svg></button>
+            <button type="submit" id="send" class="send-button" aria-label="Send message" title="Send message" disabled><svg class="icon"><use href="#i-arrow-up"></use></svg></button>
+          </div>
+        </form>
+        <div class="composer-foot"><span id="mode-note">Agent can search the public web when needed.</span><span class="keyboard-note"><kbd>Enter</kbd> to send</span></div>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="dialog" id="settings-dialog" aria-labelledby="settings-title">
+    <div class="dialog-heading">
+      <h2 id="settings-title">Settings</h2>
+      <button type="button" class="icon-button" data-close-dialog="settings-dialog" aria-label="Close settings"><svg class="icon"><use href="#i-close"></use></svg></button>
+    </div>
+    <form id="settings-form" class="settings-form">
+      <label>Local endpoint<input id="endpoint" name="endpoint" type="url" required placeholder="http://127.0.0.1:1234/v1"></label>
+      <label>Model ID<input id="model" name="model" type="text" maxlength="250" placeholder="Use the first available model"></label>
+      <p class="form-note">Start LM Studio or Ollama with a model you supply.</p>
+      <p class="dialog-error" id="settings-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" class="secondary-button" data-close-dialog="settings-dialog">Cancel</button><button type="submit" class="primary-button" id="save-settings">Save settings</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="dialog preview-dialog" id="preview-dialog" aria-labelledby="preview-title">
+    <div class="dialog-heading">
+      <h2 id="preview-title" translate="no">Document preview</h2>
+      <button type="button" class="icon-button" data-close-dialog="preview-dialog" aria-label="Close preview"><svg class="icon"><use href="#i-close"></use></svg></button>
+    </div>
+    <pre id="preview-text" tabindex="0"></pre>
+    <div class="dialog-actions"><button type="button" class="secondary-button" id="copy-markdown"><svg class="icon"><use href="#i-copy"></use></svg>Copy Markdown</button><button type="button" class="primary-button" id="download-markdown"><svg class="icon"><use href="#i-download"></use></svg>Download .md</button></div>
+  </dialog>
+</body>
+</html>
